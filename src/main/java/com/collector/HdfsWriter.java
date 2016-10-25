@@ -8,6 +8,10 @@ import org.springframework.messaging.Message;
 import org.springframework.util.Assert;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class HdfsWriter {
 
@@ -27,12 +31,12 @@ public class HdfsWriter {
         this.fsShell = new FsShell(configuration);
     }
 
-    public void processMessage(Message<File> message) {
+    public void processMessage(Message<File> message) throws IOException {
         File file = message.getPayload();
         logger.info("Copy file to HDFS : {}", file);
         String dst = destinationDirectory + File.separator + file.getName();
         fsShell.copyFromLocal(file.getAbsolutePath(), dst);
-        new File(backupDirectory).mkdirs();
-        if (fsShell.test(dst)) file.renameTo(new File(backupDirectory + File.separator + file.getName()));
+        Files.createDirectories(Paths.get(backupDirectory));
+        if (fsShell.test(dst)) Files.move(Paths.get(file.getAbsolutePath()), Paths.get(backupDirectory + File.separator + file.getName()), StandardCopyOption.REPLACE_EXISTING);
     }
 }

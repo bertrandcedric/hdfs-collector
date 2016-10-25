@@ -8,7 +8,10 @@ import org.springframework.messaging.Message;
 import org.springframework.util.Assert;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class FileProcessor {
 
@@ -29,14 +32,14 @@ public class FileProcessor {
         this.errorDirectory = errorDirectory;
     }
 
-    public File handle(Message<File> message) {
+    public File processMessage(Message<File> message) throws IOException {
         File file = message.getPayload();
 
         String dst = destinationDirectory + File.separator + file.getName();
         if (fsShell.test(dst)) {
             logger.info("File already exists in HDFS: {}", dst);
-            new File(errorDirectory).mkdirs();
-            file.renameTo(new File(errorDirectory + File.separator + file.getName()));
+            Files.createDirectories(Paths.get(errorDirectory));
+            Files.move(Paths.get(file.getAbsolutePath()), Paths.get(errorDirectory + File.separator + file.getName()), StandardCopyOption.REPLACE_EXISTING);
             return null;
         } else {
             logger.info("Processing file: {}", file.getAbsolutePath());

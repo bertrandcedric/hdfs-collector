@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:int="http://www.springframework.org/schema/integration"
-       xmlns:file="http://www.springframework.org/schema/integration/file"
+       xmlns:int-file="http://www.springframework.org/schema/integration/file"
        xmlns:hdp="http://www.springframework.org/schema/hadoop"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
@@ -18,28 +18,39 @@
         fs.defaultFS=${hd.fs}
     </hdp:configuration>
 
-    <int:channel id="in-channel"/>
+    <int:channel id="in-channel">
+        <int:interceptors>
+            <int:wire-tap channel="loggerChannel"/>
+        </int:interceptors>
+    </int:channel>
+
     <int:channel id="out-channel"/>
 
-    <file:inbound-channel-adapter id="files-in-adapter"
-                                  channel="in-channel"
-                                  directory="${polling.directory}"
-                                  filename-pattern="${polling.fileNamePattern}"
-                                  prevent-duplicates="false">
+    <int-file:inbound-channel-adapter channel="in-channel"
+                                      directory="${polling.directory}"
+                                      filename-pattern="${polling.fileNamePattern}"
+                                      prevent-duplicates="false">
         <int:poller fixed-delay="${polling.fixedDelay}"/>
-        <file:nio-locker/>
-    </file:inbound-channel-adapter>
+        <int-file:nio-locker/>
+    </int-file:inbound-channel-adapter>
 
     <int:service-activator input-channel="in-channel"
                            output-channel="out-channel"
-                           ref="fileProcessor"
-                           method="handle"
-                           async="false"/>
+                           ref="fileProcessor"/>
 
-    <int:outbound-channel-adapter id="files-out-adapter"
-                                  channel="out-channel"
+    <int:outbound-channel-adapter channel="out-channel"
                                   ref="hdfsWriter"
                                   method="processMessage"/>
+
+    <int:outbound-channel-adapter id="loggerChannel"
+                                  ref="logger"
+                                  method="processMessage"/>
+
+    <bean id="fileProcessor" class="com.collector.FileProcessor">
+        <constructor-arg index="0" value="${polling.destinationHdfsDirectory}"/>
+        <constructor-arg index="1" value="${polling.error.directory}"/>
+        <constructor-arg index="2" ref="hadoopConfiguration"/>
+    </bean>
 
     <bean id="hdfsWriter"
           class="com.collector.HdfsWriter">
@@ -48,9 +59,6 @@
         <constructor-arg index="2" ref="hadoopConfiguration"/>
     </bean>
 
-    <bean id="fileProcessor" class="com.collector.FileProcessor">
-        <constructor-arg index="0" value="${polling.destinationHdfsDirectory}"/>
-        <constructor-arg index="1" value="${polling.error.directory}"/>
-        <constructor-arg index="2" ref="hadoopConfiguration"/>
-    </bean>
+    <bean id="logger" class="com.collector.Logger"/>
+
 </beans>

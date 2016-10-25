@@ -34,8 +34,8 @@ public class CollectorTests {
     private Configuration configuration;
 
     private HdfsWriter handler;
-    private String outputDirectory = "/hadoop/output/";
-    private String backupDirectory = "/hadoop/backup/";
+    private String outputDirectory = "/tmp/hadoop/test/output/";
+    private String backupDirectory = "/tmp/hadoop/test/backup/";
     private FsShell fsShell;
     private File sourceFile;
 

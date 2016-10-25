@@ -2,6 +2,7 @@ package com.collector;
 
 import com.collector.launcher.CollectorLauncher;
 import org.apache.hadoop.conf.Configuration;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -22,6 +23,11 @@ public class CollectorIntegrationTests {
 
     @Autowired
     private Configuration configuration;
+
+    @Test
+    public void test() {
+        Assert.assertTrue(true);
+    }
 
     @Test
     public void collect() {
