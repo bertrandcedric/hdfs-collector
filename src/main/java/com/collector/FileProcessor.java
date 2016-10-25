@@ -34,7 +34,7 @@ public class FileProcessor {
 
         String dst = destinationDirectory + File.separator + file.getName();
         if (fsShell.test(dst)) {
-            logger.info("File alrdeady exists in HDFS: {}", dst);
+            logger.info("File already exists in HDFS: {}", dst);
             new File(errorDirectory).mkdirs();
             file.renameTo(new File(errorDirectory + File.separator + file.getName()));
             return null;

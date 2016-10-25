@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Scanner;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(locations = {"classpath:/META-INF/spring/collector-context.xml"})
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:/META-INF/spring/collector-context.xml"})
 public class CollectorIntegrationTests {
 
     private static final Logger logger = LoggerFactory.getLogger(CollectorIntegrationTests.class);
@@ -23,7 +23,7 @@ public class CollectorIntegrationTests {
     @Autowired
     private Configuration configuration;
 
-//    @Test
+    @Test
     public void collect() {
         AbstractApplicationContext context = new ClassPathXmlApplicationContext(
                 "/META-INF/spring/collector-context.xml", CollectorLauncher.class);
