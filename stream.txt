@@ -1,0 +1,14 @@
+stream destroy --name hdfs
+stream destroy --name counter
+stream destroy --name log
+stream destroy --name out-file
+
+stream create --definition "in-file: file --directory=/tmp/hadoop/input --fixed-delay=5 --mode=ref | hdfs --directory=/tmp/hadoop/output --fs-uri=hdfs://0.0.0.0:32770" --name hdfs
+stream create --definition ":hdfs.in-file > counter --database=1 --name=collector" --name counter
+stream create --definition ":hdfs.in-file > log" --name log
+stream create --definition ":hdfs.in-file > out-file: file --directory=/tmp/hadoop/output --name-expression=payload.getName()" --name out-file
+
+stream deploy --name hdfs
+stream deploy --name counter
+stream deploy --name log
+stream deploy --name out-file
