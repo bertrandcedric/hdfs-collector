@@ -1,4 +1,4 @@
-package com.bigdata.log.sink;
+package com.bigdata.log;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

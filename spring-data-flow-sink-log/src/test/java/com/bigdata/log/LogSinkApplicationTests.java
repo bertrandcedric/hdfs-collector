@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bigdata.log.sink;
+package com.bigdata.log;
 
 import org.apache.commons.logging.Log;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.bigdata.log.sink;
+package com.bigdata.hdfs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -8,19 +8,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.integration.annotation.ServiceActivator;
 
 @EnableBinding(Sink.class)
-@EnableConfigurationProperties(LogSinkProperties.class)
-public class LogSinkConfiguration {
+@EnableConfigurationProperties(HdfsSinkProperties.class)
+public class HdfsSinkConfiguration {
 
 	@Autowired
-	private LogSinkProperties properties;
+	private HdfsSinkProperties properties;
 
 	@Bean
 	@ServiceActivator(inputChannel = Sink.INPUT)
-	public CustomLoggingHandler logSinkHandler() {
-        CustomLoggingHandler loggingHandler = new CustomLoggingHandler(this.properties.getLevel().name());
-		loggingHandler.setExpression(this.properties.getExpression());
-		loggingHandler.setLoggerName(this.properties.getName());
-		return loggingHandler;
+	public HdfsHandler hdfsSinkHandler() {
+        HdfsHandler hdfsHandler = new HdfsHandler(
+        		this.properties.getDestinationDirectory(),
+				this.properties.getBackupDirectory(),
+				this.properties.getFsUri());
+		return hdfsHandler;
 	}
 
 }

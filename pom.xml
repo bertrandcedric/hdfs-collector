@@ -30,5 +30,6 @@
         <module>admin</module>
         <module>hdfs-collector</module>
         <module>spring-data-flow-sink-hdfs</module>
+        <module>spring-data-flow-sink-log</module>
     </modules>
   </project>

@@ -1,4 +1,4 @@
-package com.bigdata.log.sink;
+package com.bigdata.log;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Value;

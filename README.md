@@ -58,23 +58,18 @@ spring:
 
 ```
 app import --uri http://bit.ly/stream-applications-kafka-maven
-app register --name custom_log --type sink --uri file:///home/vinte/workspace/bigdata/spring-data-flow-sink-hdfs/target/spring-data-flow-sink-hdfs-1.0.0-SNAPSHOT.jar
+app unregister --name custom_hdfs --type sink
+app register --name custom_hdfs --type sink --uri file:///home/vinte/workspace/bigdata/spring-data-flow-sink-hdfs/target/spring-data-flow-sink-hdfs-1.0.0-SNAPSHOT.jar
 
 stream destroy --name hdfs
 stream destroy --name counter
 stream destroy --name log
-stream destroy --name custom_log
-stream destroy --name out-file
 
-stream create --definition "in-file: file --directory=/tmp/hadoop/input --fixed-delay=5 --mode=ref | hdfs --directory=/tmp/hadoop/output --fs-uri=hdfs://0.0.0.0:32770" --name hdfs
+stream create --definition "in-file: file --directory=/tmp/hadoop/input --fixed-delay=5 --mode=ref --filename-pattern=*.txt | custom_hdfs --destinationDirectory=/tmp/hadoop/output --backupDirectory=/tmp/hadoop/backup --fs-uri=hdfs://0.0.0.0:32770" --name hdfs
 stream create --definition ":hdfs.in-file > counter" --name counter
 stream create --definition ":hdfs.in-file > log" --name log
-stream create --definition ":hdfs.in-file > custom_log" --name custom_log
-stream create --definition ":hdfs.in-file > out-file: file --directory=/tmp/hadoop/output --name-expression=payload.getName()" --name out-file
 
 stream deploy --name hdfs
 stream deploy --name counter
 stream deploy --name log
-stream deploy --name out-file
-stream deploy --name custom_log
 ```
