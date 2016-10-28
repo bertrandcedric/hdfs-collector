@@ -29,14 +29,14 @@ public class CollectorIntegrationTests {
         Assert.assertTrue(true);
     }
 
-    @Test
-    public void collect() {
-        AbstractApplicationContext context = new ClassPathXmlApplicationContext(
-                "/META-INF/spring/collector-context.xml", CollectorLauncher.class);
-        logger.debug("File Polling Application Running");
-        context.registerShutdownHook();
-        Scanner scanIn = new Scanner(System.in);
-        scanIn.nextLine();
-    }
+//    @Test
+//    public void collect() {
+//        AbstractApplicationContext context = new ClassPathXmlApplicationContext(
+//                "/META-INF/spring/collector-context.xml", CollectorLauncher.class);
+//        logger.debug("File Polling Application Running");
+//        context.registerShutdownHook();
+//        Scanner scanIn = new Scanner(System.in);
+//        scanIn.nextLine();
+//    }
 
 }
