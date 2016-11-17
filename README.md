@@ -1,10 +1,10 @@
 # Prerequis
 
 ```
-/opt/kafka_2.11-0.10.1.0/bin/kafka-server-start.sh /opt/kafka_2.11-0.10.1.0/config/server.properties
 /opt/zookeeper-3.4.9/bin/zkServer.sh start
+/opt/kafka_2.11-0.10.1.0/bin/kafka-server-start.sh /opt/kafka_2.11-0.10.1.0/config/server.properties
+sudo service redis_6379 start
 ```
-
 
 # Admin spring boot
 
