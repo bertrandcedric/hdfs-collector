@@ -50,6 +50,10 @@ stream deploy --name log
 mettre des fichiers dans /tmp/hadoop/input
 ils doivent se retrouver dans /tmp/hadoop/output sur hadoop
 
+```
+touch input/{{a..z},{A..Z},{0..99}}.txt
+```
+
 # Configuration qui a été ajouté dans le code de spring-cloud-dataflow/spring-cloud-dataflow-server-local
 
 ## modification pom.xml :
